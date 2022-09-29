@@ -1,0 +1,59 @@
+body {
+	background-color: #333333;
+}
+
+h1, h2 {
+	font-family: Arial;
+	color: #ececec;
+	text-align: center;
+}
+
+div {
+	margin: auto;
+	width: min-content;
+	padding: 8px;
+	display: flex;
+	justify-content: center;
+}
+
+#dl_status {
+	color: lightgreen;
+	text-align: center;
+	margin: 0;
+}
+
+#url_input {
+	font-size: large;
+}
+
+#dl_button {
+	width: fit-content;
+	font-size: large;
+}
+
+@media (orientation: landscape) {
+	div {
+		flex-direction: row;
+	}
+
+	#url_input {
+		width: 25vw;
+		margin-right: 8px;
+	}
+}
+
+@media (orientation: portrait) {
+	div {
+		flex-direction: column;
+	}
+
+	#url_input {
+		width: 80vw;
+		margin-bottom: 8px;
+	}
+
+	#dl_button {
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
