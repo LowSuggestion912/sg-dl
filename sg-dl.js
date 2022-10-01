@@ -1,6 +1,6 @@
 const sg_user_expr = /soundgasm\.net\/u\/([^\/]+)\/[^\/]+/;
 const sg_audio_expr = /[\'"]([^\'"]+media.soundgasm.net\/sounds\/[^\'"]+)[\'"]/;
-const track_id_expr = /whyp\.it\/tracks\/([0-9]+)/;
+const whyp_track_id_expr = /whyp\.it\/tracks\/([0-9]+)/;
 const url_ext_expr = /\.[^.]+$/;
 const bad_fname_chars_expr = /["/:\\<>|?*]/g;
 const max_fname_len = 250;
@@ -95,10 +95,11 @@ function sg_download(url, username)
 	});
 }
 
-function whyp_download(track_id)
+function whyp_download(track_id, token)
 {
 	update_status('Fetching track info', false);
-	fetch('https://api.allorigins.win/raw?url=https://api.whyp.it/api/tracks/' + track_id).then((response) => {
+	query_string = (token === null) ? '' : ('?token=' + token);
+	fetch('https://api.allorigins.win/raw?url=https://api.whyp.it/api/tracks/' + track_id + query_string).then((response) => {
 		if (!response.ok) {
 			update_status('Server returned ' + response.status.toString(), true);
 			return;
@@ -129,12 +130,13 @@ function start_download()
 {
 	const url = document.getElementById('url_input').value;
 	const sg_user_match = url.match(sg_user_expr);
-	const track_id_match = url.match(track_id_expr);
+	const track_id_match = url.match(whyp_track_id_expr);
 	if (sg_user_match != null) {
 		sg_download(url, sg_user_match[1]);
 	}
 	else if (track_id_match != null) {
-		whyp_download(track_id_match[1]);
+		whyp_url = new URL(url);
+		whyp_download(track_id_match[1], whyp_url.searchParams.get('token'));
 	}
 	else {
 		update_status('Unsupported URL', true);
